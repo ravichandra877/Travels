@@ -1,0 +1,22 @@
+{% extends "base.html" %}
+{% block title %}Find a ride | Hanuman Travels{% endblock %}
+{% block content %}
+<section class="dashboard-head"><div><div class="eyebrow">CUSTOMER PORTAL</div><h1>Where are we <em>going?</em></h1><p>Choose your pickup and destination. We'll help find your ride.</p></div><div class="head-stamp">HT <span>• JOURNEY PLANNER</span></div></section>
+<section class="booking-layout">
+<div class="panel booking-panel"><div class="panel-top"><div><div class="form-kicker">PLAN YOUR TRIP</div><h2>Book your transport</h2></div><span class="step-pill">01 / 03</span></div>
+<form method="post" action="{{ url_for('book') }}">
+<div class="field-group"><label>Starting location</label><div class="input-with-button"><input id="start_location" name="start_location" placeholder="Enter pickup location" required><button type="button" class="location-btn" id="current-location">◎ Use current location</button></div><small class="field-hint" id="location-status">You can type a place or use your device location.</small></div>
+<div class="field-group"><label>Destination</label><input name="destination" placeholder="Where would you like to go?" required></div>
+<div class="field-row"><div class="field-group"><label>Travel date</label><input type="date" name="travel_date" required></div><div class="field-group"><label>Passengers</label><input type="number" name="passengers" min="1" max="30" value="1" required></div></div>
+<div class="field-group"><label>Select transport</label><select name="transport_id" required><option value="">Choose available vehicle</option>{% for t in transports %}<option value="{{ t.id }}">{{ t.name }} · {{ t.vehicle_type }} · ₹{{ '%.0f'|format(t.rate_per_km) }}/km · {{ t.capacity }}</option>{% endfor %}</select></div>
+<div class="field-group"><label>Additional request <span class="optional">(optional)</span></label><textarea name="notes" rows="2" placeholder="Any luggage or special request?"></textarea></div>
+<button class="btn btn-primary full" type="submit">Request booking <span>→</span></button>
+<p class="fine-print">Distance and fare are estimates. Your booking remains pending until the admin confirms it.</p>
+</form></div>
+<div class="panel fleet-panel"><div class="form-kicker">OUR FLEET</div><h2>Choose your comfort</h2><p class="muted">Available vehicles and indicative rates.</p>
+{% for t in transports %}<div class="vehicle-row"><div class="vehicle-icon">{% if 'SUV' in t.vehicle_type or 'Innova' in t.name %}▰{% elif 'Tempo' in t.name %}▤{% else %}▱{% endif %}</div><div class="vehicle-info"><b>{{ t.name }}</b><small>{{ t.vehicle_type }} · {{ t.capacity }}</small><small>Based in {{ t.base_location }}</small></div><div class="vehicle-rate"><b>₹{{ '%.0f'|format(t.rate_per_km) }}</b><small>per km</small></div></div>{% else %}<p>No vehicles available right now.</p>{% endfor %}
+<div class="estimate-note">✦ Final fare depends on the route distance and selected vehicle rate.</div></div>
+</section>
+<section class="panel history-panel"><div class="panel-top"><div><div class="form-kicker">YOUR BOOKINGS</div><h2>Booking history</h2></div></div>
+{% if bookings %}<div class="table-wrap"><table><thead><tr><th>Trip</th><th>Vehicle</th><th>Date</th><th>Distance</th><th>Estimated fare</th><th>Status</th></tr></thead><tbody>{% for b in bookings %}<tr><td><b>{{ b.start_location }}</b><small class="table-sub">to {{ b.destination }}</small></td><td>{{ b.transport_name }}</td><td>{{ b.travel_date }}</td><td>{{ '%.1f'|format(b.distance_km) }} km</td><td>₹{{ '%.0f'|format(b.estimated_cost) }}</td><td><span class="status {{ b.status|lower }}">{{ b.status }}</span></td></tr>{% endfor %}</tbody></table></div>{% else %}<div class="empty-state">No bookings yet. Your next adventure is one request away.</div>{% endif %}</section>
+{% endblock %}

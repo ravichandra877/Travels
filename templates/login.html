@@ -1,0 +1,11 @@
+{% extends "base.html" %}
+{% block title %}Login | Hanuman Travels{% endblock %}
+{% block content %}
+<section class="auth-layout"><div class="auth-aside"><div class="eyebrow">WELCOME BACK</div><h1>Your next journey<br><em>starts here.</em></h1><p>Sign in to book a comfortable ride or manage your Hanuman Travels fleet.</p><div class="aside-route">● ─ ─ ─ ─ ─ ─ ◉ <small>READY WHEN YOU ARE</small></div></div>
+<div class="form-card"><div class="form-kicker">HANUMAN TRAVELS PORTAL</div><h2>Sign in</h2><p class="muted">Enter your account details to continue.</p><form method="post">
+<label>Email address</label><input type="email" name="email" placeholder="you@example.com" required>
+<label>Password</label><input type="password" name="password" placeholder="Enter your password" required>
+<button class="btn btn-primary full" type="submit">Login <span>→</span></button></form>
+<div class="form-foot">New customer? <a href="{{ url_for('register') }}">Create an account</a></div>
+<div class="role-note">Admin and customers use this secure login page. Your dashboard opens automatically based on your account role.</div></div></section>
+{% endblock %}
